@@ -64,4 +64,19 @@ app.delete("/delete/:id",async(req,resp)=>{
         resp.status(404).json({error:"some unexpected error has been occured"})
     }
 })
+
+app.put("/update/:id", async (req, resp) => {
+    try {
+        const id = req.params.id;
+        const wasteExist = await Waste.findById(id);
+        if (!wasteExist) {
+            return resp.status(400).json({ msg: "user not found" });
+        }
+        const updatedData = await Waste.findByIdAndUpdate(id, req.body, { new: true });
+        resp.status(200).json(updatedData);
+    } catch (error) {
+        resp.status(500).json({ error: "some unexpected error has occurred" });
+    }
+});
+
 app.listen(8000);
